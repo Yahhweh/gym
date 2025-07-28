@@ -1,0 +1,229 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+<style>
+  .hero-section {
+    background-image:
+      linear-gradient(90deg, rgba(0, 0, 0, 0.9) 0%, rgba(255, 255, 255, 0.2) 100%),
+      url('{% static 'bootstrap/img/13692001_1920_1080_25fps-ezgif.com-video-to-gif-converter.gif' %}');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-blend-mode: multiply;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    position: relative;
+    overflow: hidden;
+    margin-bottom: 80px;
+  }
+
+  .hero-content {
+    position: relative;
+    z-index: 2;
+  }
+
+  .hero-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(circle, transparent 0%, rgba(0,0,0,0.7) 100%);
+    z-index: 1;
+  }
+
+  .section-title {
+    position: relative;
+    padding-bottom: 15px;
+    margin-bottom: 30px;
+  }
+
+  .section-title::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 80px;
+    height: 4px;
+    background: #0d6efd;
+    border-radius: 2px;
+  }
+
+  .gym-card {
+    transition: all 0.3s ease;
+    overflow: hidden;
+    border: none;
+    border-radius: 10px;
+    box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+  }
+
+  .gym-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 15px 30px rgba(13, 110, 253, 0.3);
+  }
+
+  .gym-card img {
+    height: 200px;
+    object-fit: cover;
+    transition: transform 0.5s ease;
+  }
+
+  .gym-card:hover img {
+    transform: scale(1.05);
+  }
+
+  .gym-card .card-body {
+    background: #1a1a1a;
+  }
+
+  .story-card {
+    background: rgba(26, 26, 26, 0.8);
+    border-radius: 15px;
+    border: 1px solid rgba(255,255,255,0.1);
+    box-shadow: 0 15px 30px rgba(0,0,0,0.4);
+    backdrop-filter: blur(5px);
+    overflow: hidden;
+  }
+
+  @media (max-width: 768px) {
+    .hero-section {
+      height: 80vh;
+      margin-bottom: 50px;
+    }
+
+    .hero-content h1 {
+      font-size: 2.5rem;
+    }
+  }
+
+  .pulse-animation {
+    animation: pulse 2s infinite;
+  }
+
+  @keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+    100% { transform: scale(1); }
+  }
+</style>
+
+<section class="hero-section">
+  <div class="hero-overlay"></div>
+  <div class="container hero-content">
+    <div class="row justify-content-center">
+      <div class="col-lg-8 text-center">
+        <h1 class="display-3 fw-bold text-white mb-4">Welcome to Kirill's Gym</h1>
+        <p class="lead text-light mb-5">Where fitness meets community and goals become achievements</p>
+        <div class="d-flex justify-content-center gap-3">
+          <a href="#gyms" class="btn btn-primary btn-lg px-4 py-3 pulse-animation">
+            <i class="fas fa-dumbbell me-2"></i>Explore Gyms
+          </a>
+          <a href="#story" class="btn btn-outline-light btn-lg px-4 py-3">
+            <i class="fas fa-book me-2"></i>Our Story
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="story" class="py-5">
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-lg-10">
+        <div class="story-card p-4 p-md-5">
+          <h2 class="section-title text-white mb-4">The Rise of <span class="text-primary">Kirill's Gym</span></h2>
+          <div class="row align-items-center">
+            <div class="col-md-5 mb-4 mb-md-0">
+              <div class="bg-dark p-4 rounded text-center">
+                <i class="fas fa-dumbbell fa-5x text-primary mb-3"></i>
+                <h3 class="text-white">Stronger Together</h3>
+                <p class="text-muted">Our community motto</p>
+              </div>
+            </div>
+            <div class="col-md-7">
+              <p class="text-light fs-5">A few years ago, a small group of fitness enthusiasts dreamed of creating a training space that was more than just a gym. They wanted a welcoming community where people of all ages could find support, motivation, and the right environment to reach their goals.</p>
+              <p class="text-light fs-5">Starting with one modest location in a quiet neighborhood, <strong class="text-primary">Kirill's Gym</strong> quickly gained popularity. Members appreciated the friendly trainers, modern equipment, and flexible membership plans. Word spread, and soon more branches opened to meet the growing demand.</p>
+            </div>
+          </div>
+
+          <div class="mt-5">
+            <p class="text-light fs-5">Today, <strong class="text-primary">Kirill's Gym</strong> stands as a well‑known network of fitness centers, offering group classes, personal coaching, and a mobile app that helps track progress. Our motto — <em class="text-warning">"Stronger Together"</em> — reminds everyone that fitness is not only about exercise but also about building confidence and living a healthier life.</p>
+          </div>
+
+
+    </div>
+  </div>
+</section>
+
+<section id="gyms" class="py-5 bg-dark">
+  <div class="container">
+    <div class="row mb-5">
+      <div class="col-12 text-center">
+        <h2 class="section-title text-white text-center mx-auto">Our Premier Gym Locations</h2>
+        <p class="lead text-muted">Discover our state-of-the-art fitness centers</p>
+      </div>
+    </div>
+
+    <div class="row g-4">
+      {% for gym in gym_list %}
+      <div class="col-lg-4 col-md-6">
+        <div class="gym-card h-100">
+          <div class="position-relative">
+            <img src="{{ gym.image.url }}" class="card-img-top" alt="{{ gym.title }}">
+            <div class="position-absolute top-0 end-0 m-3">
+              <span class="badge bg-primary py-2 px-3">${{ gym.price }}/month</span>
+            </div>
+          </div>
+          <div class="card-body">
+            <h3 class="card-title">
+              <a href="{% url 'listofgyms:gym_detail' gym.id %}" class="text-white text-decoration-none">{{ gym.title }}</a>
+            </h3>
+            <p class="card-text text-light">{{ gym.description|truncatewords:20 }}</p>
+            <div class="d-flex align-items-center mt-3">
+              <i class="fas fa-map-marker-alt text-primary me-2"></i>
+              <span class="text-light">{{ gym.get_location_display }}</span>
+            </div>
+          </div>
+          <div class="card-footer bg-dark border-secondary">
+            <a href="{% url 'listofgyms:gym_detail' gym.id %}" class="btn btn-outline-primary w-100">
+              <i class="fas fa-info-circle me-2"></i>View Details
+            </a>
+          </div>
+        </div>
+      </div>
+      {% empty %}
+      <div class="col-12 text-center py-5">
+        <div class="bg-dark p-5 rounded">
+          <i class="fas fa-dumbbell fa-4x text-muted mb-4"></i>
+          <h3 class="text-muted">No Gyms Available</h3>
+          <p class="text-muted">Check back later for our fitness center locations.</p>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+
+</section>
+
+{%if user.is_authenticated%}
+{%else%}
+<section class="py-5 bg-gradient" style="background: linear-gradient(90deg, #000000 0%, #0d2b50 100%);">
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-lg-8 text-center">
+        <h2 class="text-white mb-4">Ready to Start Your Fitness Journey?</h2>
+        <p class="lead text-light mb-5">Join thousands of members achieving their goals at Kirill's Gym</p>
+        <div class="d-flex justify-content-center gap-3">
+          <a href="{%url 'people:register'%}" class="btn btn-primary btn-lg px-5 py-3">
+            <i class="fas fa-user-plus me-2" ></i>Sign Up Today
+          </a>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+{%endif%}
+{% endblock %}

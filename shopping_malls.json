@@ -1,0 +1,224 @@
+{
+  "places": [
+    {
+      "formattedAddress": "Dniprovska Embankment, 12, Kyiv, Ukraine, 02000",
+      "location": {
+        "latitude": 50.405128399999995,
+        "longitude": 30.612249700000003
+      },
+      "displayName": {
+        "text": "River Mall",
+        "languageCode": "en"
+      }
+    },
+    {
+      "formattedAddress": "Sportyvna Square, 1a, Kyiv, Ukraine, 01023",
+      "location": {
+        "latitude": 50.438727899999996,
+        "longitude": 30.523172600000002
+      },
+      "displayName": {
+        "text": "\u0422\u0420\u0426 Gulliver",
+        "languageCode": "en"
+      }
+    },
+    {
+      "formattedAddress": "Yevropeiskoho Soiuzu Ave, 47, Kyiv, Ukraine, 04208",
+      "location": {
+        "latitude": 50.5035509,
+        "longitude": 30.416455499999994
+      },
+      "displayName": {
+        "text": "Retroville",
+        "languageCode": "en"
+      }
+    },
+    {
+      "formattedAddress": "Antonovycha St, 176, Kyiv, Ukraine, 03150",
+      "location": {
+        "latitude": 50.412413199999996,
+        "longitude": 30.522305499999998
+      },
+      "displayName": {
+        "text": "Ocean Plaza",
+        "languageCode": "en"
+      }
+    },
+    {
+      "formattedAddress": "Romana Shukhevycha Ave, 2\u0442, Kyiv, Ukraine, 02232",
+      "location": {
+        "latitude": 50.493613200000006,
+        "longitude": 30.560226699999994
+      },
+      "displayName": {
+        "text": "SkyMall",
+        "languageCode": "en"
+      }
+    },
+    {
+      "formattedAddress": "Stepana Bandery Ave, 36, Kyiv, Ukraine, 04073",
+      "location": {
+        "latitude": 50.487306499999995,
+        "longitude": 30.521151699999997
+      },
+      "displayName": {
+        "text": "Blockbuster Mall",
+        "languageCode": "en"
+      }
+    },
+    {
+      "formattedAddress": "Hnata Khotkevycha St, 1\u0412, Kyiv, Ukraine, 02000",
+      "location": {
+        "latitude": 50.454733999999995,
+        "longitude": 30.635592000000003
+      },
+      "displayName": {
+        "text": "Prospekt Mall",
+        "languageCode": "en"
+      }
+    },
+    {
+      "formattedAddress": "Vadyma Hetmana St, 6, Kyiv, Ukraine, 03057",
+      "location": {
+        "latitude": 50.449761099999996,
+        "longitude": 30.441360099999997
+      },
+      "displayName": {
+        "text": "Cosmo Multimall",
+        "languageCode": "en"
+      }
+    },
+    {
+      "formattedAddress": "Lugova St, 12, Kyiv, Ukraine, 02000",
+      "location": {
+        "latitude": 50.5050676,
+        "longitude": 30.471980100000003
+      },
+      "displayName": {
+        "text": "Karavan",
+        "languageCode": "en"
+      }
+    },
+    {
+      "formattedAddress": "Kiltseva Rd, 1\u0411, Kyiv, Ukraine, 03134",
+      "location": {
+        "latitude": 50.3769753,
+        "longitude": 30.444863
+      },
+      "displayName": {
+        "text": "Epicenter",
+        "languageCode": "en"
+      }
+    },
+    {
+      "formattedAddress": "Polyarna St, 20\u0414, Kyiv, Ukraine, 04201",
+      "location": {
+        "latitude": 50.5201796,
+        "longitude": 30.479722499999998
+      },
+      "displayName": {
+        "text": "\u0415\u041f\u0406\u0426\u0415\u041d\u0422\u0420",
+        "languageCode": "uk"
+      }
+    },
+    {
+      "formattedAddress": "Stepana Bandery Ave, 11A, Kyiv, Ukraine, 04073",
+      "location": {
+        "latitude": 50.489839499999995,
+        "longitude": 30.4868905
+      },
+      "displayName": {
+        "text": "Epitsentr K",
+        "languageCode": "en"
+      }
+    },
+    {
+      "formattedAddress": "Obolonskyi Ave, 21\u0411, Kyiv, Ukraine, 04205",
+      "location": {
+        "latitude": 50.5166513,
+        "longitude": 30.498698299999997
+      },
+      "displayName": {
+        "text": "DREAM berry",
+        "languageCode": "en"
+      }
+    },
+    {
+      "formattedAddress": "Stepana Bandery Ave, 23, Kyiv, Ukraine, 04073",
+      "location": {
+        "latitude": 50.489934000000005,
+        "longitude": 30.4951873
+      },
+      "displayName": {
+        "text": "Gorodok Shopping Mall",
+        "languageCode": "en"
+      }
+    },
+    {
+      "formattedAddress": "Pavla Tychyny Ave, 1\u0432, Kyiv, Ukraine, 02000",
+      "location": {
+        "latitude": 50.428699699999996,
+        "longitude": 30.593380399999997
+      },
+      "displayName": {
+        "text": "Silver Breeze",
+        "languageCode": "en"
+      }
+    },
+    {
+      "formattedAddress": "\u0441\u0442.\u043c. \u041b\u0456\u0441\u043e\u0432\u0430, Yakova Hnizdovskoho St, 1\u0430, Kyiv, Ukraine, 02094",
+      "location": {
+        "latitude": 50.4614376,
+        "longitude": 30.642801899999995
+      },
+      "displayName": {
+        "text": "Darynok",
+        "languageCode": "en"
+      }
+    },
+    {
+      "formattedAddress": "Obolonskyi Ave, 1\u0411, Kyiv, Ukraine, 04205",
+      "location": {
+        "latitude": 50.507352499999996,
+        "longitude": 30.4984281
+      },
+      "displayName": {
+        "text": "DREAM yellow",
+        "languageCode": "en"
+      }
+    },
+    {
+      "formattedAddress": "Halytska Sq, 3, Kyiv, Ukraine, 01135",
+      "location": {
+        "latitude": 50.4463352,
+        "longitude": 30.491924999999995
+      },
+      "displayName": {
+        "text": "Ukraina Shopping Mall",
+        "languageCode": "en"
+      }
+    },
+    {
+      "formattedAddress": "Mykoly Lavrukhina St, 4, Kyiv, Ukraine, 02222",
+      "location": {
+        "latitude": 50.5165176,
+        "longitude": 30.602009599999995
+      },
+      "displayName": {
+        "text": "\u0422\u0420\u0426 \u201c\u0420\u0430\u0439ON\u201d",
+        "languageCode": "uk"
+      }
+    },
+    {
+      "formattedAddress": "Dniprovska Embankment, 13-\u0412, Kyiv, Ukraine, 02098",
+      "location": {
+        "latitude": 50.4200464,
+        "longitude": 30.5945101
+      },
+      "displayName": {
+        "text": "Epitsentr",
+        "languageCode": "en"
+      }
+    }
+  ]
+}

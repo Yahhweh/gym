@@ -1,0 +1,206 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+<div class="container py-4">
+    <div class="row mb-5">
+        <div class="col-lg-8">
+            <div class="d-flex align-items-center mb-4">
+                <h1 class="display-5 fw-bold me-3">{{ object.title }}</h1>
+                {% if is_time %}
+                <span class="badge bg-success fs-6 py-2 px-3">Open Now</span>
+                {% else %}
+                <span class="badge bg-danger fs-6 py-2 px-3">Currently Closed</span>
+                {% endif %}
+            </div>
+
+            <div class="card bg-dark border-secondary mb-4">
+                <div class="row g-0">
+                    <div class="col-md-4">
+                        {% if gym.image %}
+                        <img src="{{ gym.image.url }}" class="img-fluid rounded-start h-100" style="object-fit: cover;" alt="{{ object.title }}">
+                        {% else %}
+                        <div class="bg-secondary d-flex align-items-center justify-content-center h-100">
+                            <i class="fas fa-dumbbell fa-3x text-light"></i>
+                        </div>
+                        {% endif %}
+                    </div>
+                    <div class="col-md-8">
+                        <div class="card-body">
+                            <p class="card-text">{{ object.description }}</p>
+                            <div class="mt-4">
+                                <div class="d-flex align-items-center mb-3">
+                                    <i class="fas fa-map-marker-alt text-primary me-3 fa-lg"></i>
+                                    <div>
+                                        <div class="text-muted small">Location</div>
+                                        <div class="fw-bold">{{ object.get_location_display }}</div>
+                                    </div>
+                                </div>
+
+                                <div class="d-flex align-items-center mb-3">
+                                    <i class="fas fa-clock text-primary me-3 fa-lg"></i>
+                                    <div>
+                                        <div class="text-muted small">Working Hours</div>
+                                        <div class="fw-bold">{{ object.working_time }}</div>
+                                    </div>
+                                </div>
+
+                                <div class="d-flex align-items-center">
+                                    <i class="fas fa-tag text-primary me-3 fa-lg"></i>
+                                    <div>
+                                        <div class="text-muted small">Membership Price</div>
+                                        <div class="fw-bold fs-4 text-success">{{ object.price }}$ <span class="text-muted fs-6">per month</span></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <form method="post" action="{% url 'cart:cart_add' id=gym.id model_type='gym' %}" class="mb-5">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-success btn-lg w-100 py-3">
+                    <i class="fas fa-cart-plus me-2"></i>Add to Cart
+                </button>
+            </form>
+        </div>
+
+        <div class="col-lg-4">
+            <div class="card bg-dark border-secondary h-100">
+                <div class="card-header bg-secondary bg-opacity-25 py-3">
+                    <h3 class="h5 mb-0"><i class="fas fa-map-marked-alt me-2"></i>Location</h3>
+                </div>
+                <div class="card-body p-0">
+                    {% if latitude %}
+                    <iframe src="https://www.google.com/maps?q={{ latitude }},{{ longitude }}&hl=ru&z=16&output=embed"
+                        class="w-100"
+                        height="300"
+                        style="border:0"
+                        loading="lazy"
+                        allowfullscreen></iframe>
+                    {% else %}
+                    <div class="text-center py-5">
+                        <i class="fas fa-map-marked fa-3x text-muted mb-3"></i>
+                        <h4 class="text-muted">Map Not Available</h4>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-12">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h2 class="mb-0">Available Trainers at {{ object.title }}</h2>
+
+                <form method="get" class="d-flex">
+                    <div class="input-group" style="width: 300px;">
+                        <span class="input-group-text bg-dark border-secondary text-white"><i class="fas fa-filter"></i></span>
+                        <select name="sort" class="form-select bg-dark text-white border-secondary" onchange="this.form.submit()">
+                            <option value="asc" {% if sort_order == 'asc' %}selected{% endif %}>Price: Low to High</option>
+                            <option value="desc" {% if sort_order == 'desc' %}selected{% endif %}>Price: High to Low</option>
+                        </select>
+                    </div>
+                </form>
+            </div>
+
+            {% if trainers %}
+            <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+                {% for trainer in trainers %}
+                <div class="col">
+                    <div class="card bg-dark border-secondary h-100">
+                        <div class="position-relative">
+                            {% if trainer.image %}
+                            <img src="{{ trainer.image.url }}" class="card-img-top" style="height: 200px; object-fit: cover;" alt="{{ trainer.username }}">
+                            {% else %}
+                            <div class="bg-secondary d-flex align-items-center justify-content-center" style="height: 200px;">
+                                <i class="fas fa-user-tie fa-3x text-light"></i>
+                            </div>
+                            {% endif %}
+                            <div class="position-absolute top-0 end-0 mt-2 me-2">
+                                <span class="badge bg-primary py-2 px-3">${{ trainer.price }}/session</span>
+                            </div>
+                        </div>
+
+                        <div class="card-body">
+                            <h5 class="card-title">{{ trainer.username }}</h5>
+                            <p class="card-text text-muted">Certified {{ trainer.get_specialization_display }}</p>
+
+                            <div class="d-flex align-items-center mb-2">
+                                <i class="fas fa-star text-warning me-2"></i>
+                                <span class="small">{{ trainer.experience_years }} years experience</span>
+                            </div>
+
+                            <div class="d-flex align-items-center">
+                                <i class="fas fa-clock text-info me-2"></i>
+                                <span class="small">Available from {{ trainer.startTime }}</span>
+                            </div>
+                        </div>
+
+                        <div class="card-footer bg-transparent border-secondary">
+                            <a href="{% url 'people:trainer' trainer.pk %}" class="btn btn-outline-primary w-100">
+                                <i class="fas fa-user-circle me-2"></i>View Profile
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            {% else %}
+            <div class="card bg-dark border-secondary">
+                <div class="card-body text-center py-5">
+                    <i class="fas fa-user-slash fa-4x text-muted mb-4"></i>
+                    <h3 class="text-muted">No Trainers Available</h3>
+                    <p class="text-muted">Check back later for available trainers at this location.</p>
+                </div>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+<style>
+    .card {
+        border-radius: 12px;
+        overflow: hidden;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+    }
+
+    .card-img-top {
+        border-top-left-radius: 12px;
+        border-top-right-radius: 12px;
+    }
+
+    .badge {
+        border-radius: 10px;
+        font-weight: 500;
+    }
+
+    .btn-lg {
+        border-radius: 12px;
+        font-weight: 600;
+        transition: all 0.3s ease;
+    }
+
+    .btn-lg:hover {
+        transform: scale(1.02);
+    }
+
+    .input-group-text {
+        border-top-right-radius: 0;
+        border-bottom-right-radius: 0;
+    }
+
+    .form-select {
+        border-top-left-radius: 0;
+        border-bottom-left-radius: 0;
+    }
+</style>
+{% endblock %}

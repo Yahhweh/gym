@@ -1,0 +1,250 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<style>
+  /* Стили для страницы магазина */
+  .shop-header {
+    background: linear-gradient(135deg, #000000 0%, #0d2b50 100%);
+    padding: 60px 0;
+    margin-bottom: 40px;
+  }
+
+  .category-sidebar {
+    background: rgba(26, 26, 26, 0.9);
+    border-radius: 15px;
+    border: 1px solid rgba(255,255,255,0.1);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+    backdrop-filter: blur(5px);
+    position: sticky;
+    top: 20px;
+  }
+
+  .category-link {
+    color: #fff !important;
+    text-decoration: none;
+    padding: 12px 20px;
+    display: block;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+    border-left: 3px solid transparent;
+  }
+
+  .category-link:hover {
+    background: rgba(13, 110, 253, 0.1);
+    border-left-color: #0d6efd;
+    transform: translateX(5px);
+    color: #0d6efd !important;
+  }
+
+  .product-card {
+    background: rgba(26, 26, 26, 0.9);
+    border-radius: 15px;
+    border: 1px solid rgba(255,255,255,0.1);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+    transition: all 0.3s ease;
+    overflow: hidden;
+    height: 100%;
+  }
+
+  .product-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 20px 40px rgba(13, 110, 253, 0.2);
+    border-color: rgba(13, 110, 253, 0.3);
+  }
+
+  .product-image {
+    width: 100%;
+    height: 250px;
+    object-fit: cover;
+    transition: transform 0.5s ease;
+  }
+
+  .product-card:hover .product-image {
+    transform: scale(1.05);
+  }
+
+  .product-info {
+    padding: 20px;
+  }
+
+  .product-title {
+    color: #fff !important;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 1.2rem;
+    margin-bottom: 10px;
+    display: block;
+  }
+
+  .product-title:hover {
+    color: #0d6efd !important;
+  }
+
+  .product-description {
+    color: #bbb;
+    font-size: 0.95rem;
+    margin-bottom: 15px;
+    line-height: 1.5;
+  }
+
+  .product-price {
+    color: #0d6efd;
+    font-weight: 700;
+    font-size: 1.3rem;
+    margin-bottom: 10px;
+  }
+
+  .product-quantity {
+    color: #28a745;
+    font-size: 0.9rem;
+    font-weight: 500;
+  }
+
+  .out-of-stock {
+    color: #dc3545;
+  }
+
+  .section-title {
+    position: relative;
+    padding-bottom: 15px;
+    margin-bottom: 30px;
+    color: #fff;
+  }
+
+  .section-title::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 80px;
+    height: 4px;
+    background: #0d6efd;
+    border-radius: 2px;
+  }
+
+  @media (max-width: 768px) {
+    .shop-header {
+      padding: 40px 0;
+      margin-bottom: 30px;
+    }
+
+    .category-sidebar {
+      margin-bottom: 30px;
+      position: static;
+    }
+  }
+</style>
+
+<!-- Заголовок страницы -->
+<section class="shop-header">
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-lg-8 text-center">
+        <h1 class="display-4 fw-bold text-white mb-3">
+          <i class="fas fa-store me-3"></i>Gym Store
+        </h1>
+        <p class="lead text-light">Premium fitness equipment and supplements for your workout needs</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="container">
+  <div class="row">
+    <!-- Боковая панель с категориями -->
+    <div class="col-lg-3 col-md-4 mb-4">
+      <div class="category-sidebar p-4">
+        <h4 class="section-title text-white mb-4">
+          <i class="fas fa-list me-2"></i>Categories
+        </h4>
+        <div class="category-list">
+          {% for category in categories %}
+            <a href="{% url 'shop:list_by_category' title=category.title %}" class="category-link">
+              <i class="fas fa-chevron-right me-2"></i>{{ category.title }}
+            </a>
+          {% empty %}
+            <p class="text-muted">No categories available</p>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+
+    <!-- Список товаров -->
+    <div class="col-lg-9 col-md-8">
+      <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="section-title text-white mb-0">
+          <i class="fas fa-shopping-bag me-2"></i>Products
+        </h2>
+        <span class="text-muted">{{ products|length }} product{{ products|length|pluralize }}</span>
+      </div>
+
+      {% if products %}
+        <div class="row g-4">
+          {% for product in products %}
+            <div class="col-lg-4 col-md-6 col-sm-6">
+              <div class="product-card">
+                <div class="position-relative overflow-hidden">
+                  <img src="{{ product.image.url }}" alt="{{ product.title }}" class="product-image">
+                  {% if product.quantity <= 0 %}
+                    <div class="position-absolute top-0 start-0 w-100 h-100 d-flex align-items-center justify-content-center" style="background: rgba(0,0,0,0.7);">
+                      <span class="badge bg-danger fs-6 py-2 px-3">Out of Stock</span>
+                    </div>
+                  {% elif product.quantity <= 5 %}
+                    <div class="position-absolute top-0 end-0 m-3">
+                      <span class="badge bg-warning text-dark py-2 px-3">Low Stock</span>
+                    </div>
+                  {% endif %}
+                </div>
+
+                <div class="product-info">
+                  <a class="product-title">
+                    {{ product.title }}
+                  </a>
+
+                  <p class="product-description">
+                    {{ product.description|truncatewords:15 }}
+                  </p>
+
+                  <div class="d-flex justify-content-between align-items-center mb-3">
+                    <span class="product-price">${{ product.price }}</span>
+                    <span class="product-quantity {% if product.quantity <= 0 %}out-of-stock{% endif %}">
+                      {% if product.quantity > 0 %}
+                        <i class="fas fa-box me-1"></i>{{ product.quantity }} in stock
+                      {% else %}
+                        <i class="fas fa-times-circle me-1"></i>Out of stock
+                      {% endif %}
+                    </span>
+                  </div>
+
+                  <div class="d-grid">
+                    {% if product.quantity > 0 %}
+                      <a href="{% url 'shop:product_detail' product.slug %}" class="btn btn-primary">
+                        <i class="fas fa-eye me-2"></i>View Details
+                      </a>
+                    {% else %}
+                      <button class="btn btn-secondary" disabled>
+                        <i class="fas fa-ban me-2"></i>Unavailable
+                      </button>
+                    {% endif %}
+                  </div>
+                </div>
+              </div>
+            </div>
+          {% endfor %}
+        </div>
+      {% else %}
+        <!-- Пустое состояние -->
+        <div class="text-center py-5">
+          <div class="bg-dark p-5 rounded">
+            <i class="fas fa-shopping-bag fa-4x text-muted mb-4"></i>
+            <h3 class="text-muted mb-3">No Products Available</h3>
+            <p class="text-muted">Check back later for our latest fitness equipment and supplements.</p>
+          </div>
+        </div>
+      {% endif %}
+    </div>
+  </div>
+</div>
+
+<!-- Призыв к действию -->
+{% endblock %}

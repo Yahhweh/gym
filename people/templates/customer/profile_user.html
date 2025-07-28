@@ -1,0 +1,255 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+<div class="container py-4">
+    <div class="row">
+        <div class="col-lg-4 mb-4">
+            <div class="card bg-dark border-secondary shadow-lg">
+                <div class="card-body text-center">
+                    <div class="position-relative mb-4">
+                        {% if user.image %}
+                        <img src="{{ user.image.url }}" class="rounded-circle border border-3 border-primary"
+                             width="150" height="150" alt="{{ user.username }}">
+                        {% else %}
+                        <div class="bg-secondary rounded-circle d-flex align-items-center justify-content-center mx-auto"
+                             style="width: 150px; height: 150px;">
+                            <i class="fas fa-user fa-3x text-light"></i>
+                        </div>
+                        {% endif %}
+
+                        <div class="position-absolute bottom-0 end-0">
+                            {% if user.is_client %}
+                            <span class="badge bg-primary py-2 px-3 rounded-pill">
+                                <i class="fas fa-user me-1"></i> User
+                            </span>
+                            {% else %}
+                            <span class="badge bg-warning text-dark py-2 px-3 rounded-pill">
+                                <i class="fas fa-dumbbell me-1"></i> Trainer
+                            </span>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <h1 class="h3 mb-1">Hello, {{ user.first_name }} {{ user.last_name }}</h1>
+                    <p class="text-muted mb-4">@{{ user.username }}</p>
+
+                    <div class="text-start">
+                        <div class="d-flex align-items-center mb-3">
+                            <div class="bg-primary p-2 rounded-circle me-3">
+                                <i class="fas fa-envelope fa-fw"></i>
+                            </div>
+                            <div>
+                                <div class="text-muted small">Email</div>
+                                <div class="fw-bold">{{ user.email }}</div>
+                            </div>
+                        </div>
+
+                        <div class="d-flex align-items-center">
+                            <div class="bg-primary p-2 rounded-circle me-3">
+                                <i class="fas fa-calendar-alt fa-fw"></i>
+                            </div>
+                            <div>
+                                <div class="text-muted small">Member Since</div>
+                                <div class="fw-bold">{{ user.date_joined|date:"M d, Y" }}</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-8">
+            <div class="card bg-dark border-secondary shadow-lg mb-4">
+                <div class="card-header bg-secondary bg-opacity-25 py-3">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <h2 class="h5 mb-0">
+                            <i class="fas fa-id-card me-2"></i>Active Subscriptions
+                        </h2>
+                        <span class="badge bg-primary py-2 px-3">
+                            {{ subscriptions|length }} active
+                        </span>
+                    </div>
+                </div>
+
+                <div class="card-body">
+                    {% if subscriptions %}
+                    <div class="table-responsive">
+                        <table class="table table-dark table-hover align-middle mb-0">
+                            <thead>
+                                <tr>
+                                    <th>Gym</th>
+                                    <th>Days Remaining</th>
+                                    <th class="text-center">Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for subscription in subscriptions %}
+                                <tr>
+                                    <td>
+                                        <div class="d-flex align-items-center">
+                                            <div class="me-3">
+                                                <i class="fas fa-dumbbell fa-2x text-primary"></i>
+                                            </div>
+                                            <div>
+                                                <div class="fw-bold">
+                                                    <a href="{% url 'listofgyms:gym_detail' subscription.gym.id %}" class="text-decoration-none">
+                                                        {{ subscription.gym }}
+                                                    </a>
+                                                </div>
+                                                <div class="text-muted small">
+                                                    {{ subscription.gym.get_location_display }}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="d-flex align-items-center">
+                                            <div class="me-2">
+                                                <i class="fas fa-clock text-info"></i>
+                                            </div>
+                                            <div class="fw-bold">{{ subscription.days_left }} days</div>
+                                        </div>
+                                    </td>
+                                    <td class="text-center">
+                                        {% if subscription.days_left > 7 %}
+                                        <span class="badge bg-success py-2">Active</span>
+                                        {% elif subscription.days_left > 3 %}
+                                        <span class="badge bg-warning text-dark py-2">Expiring soon</span>
+                                        {% else %}
+                                        <span class="badge bg-danger py-2">About to expire</span>
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                    {% else %}
+                    <div class="text-center py-4">
+                        <div class="mb-3">
+                            <i class="fas fa-calendar-times fa-3x text-muted"></i>
+                        </div>
+                        <h4 class="text-muted">No Active Subscriptions</h4>
+                        <p class="text-muted">You don't have any active gym memberships.</p>
+                        <a href="{% url 'listofgyms:gym_list' %}" class="btn btn-outline-primary mt-2">
+                            <i class="fas fa-search me-1"></i>Find a Gym
+                        </a>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+
+            <div class="card bg-dark border-secondary shadow-lg">
+                <div class="card-header bg-secondary bg-opacity-25 py-3">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <h2 class="h5 mb-0">
+                            <i class="fas fa-calendar-check me-2"></i>Booked Trainings
+                        </h2>
+                        <span class="badge bg-primary py-2 px-3">
+                            {{ trainings|length }} scheduled
+                        </span>
+                    </div>
+                </div>
+
+                <div class="card-body">
+                    {% if trainings %}
+                    <div class="table-responsive">
+                        <table class="table table-dark table-hover align-middle mb-0">
+                            <thead>
+                                <tr>
+                                    <th>Trainer</th>
+                                    <th>Specialization</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for training in trainings %}
+                                <tr>
+                                    <td>
+                                        <div class="d-flex align-items-center">
+                                            <div class="me-3">
+                                                <i class="fas fa-user-tie fa-2x text-info"></i>
+                                            </div>
+                                            <div>
+                                                <div class="fw-bold">{{ training.get_trainer_username }}</div>
+                                                <div class="text-muted small">
+                                                    {{ training.date|date:"M d, Y" }} at {{ training.time|time:"H:i" }}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <span class="badge bg-secondary py-2">
+                                            {{ training.get_trainer_specialization }}
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <span class="badge bg-success py-2">
+                                            <i class="fas fa-check-circle me-1"></i>Confirmed
+                                        </span>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                    {% else %}
+                    <div class="text-center py-4">
+                        <div class="mb-3">
+                            <i class="fas fa-calendar-plus fa-3x text-muted"></i>
+                        </div>
+                        <h4 class="text-muted">No Upcoming Trainings</h4>
+                        <p class="text-muted">You haven't booked any personal training sessions yet.</p>
+                        <a href="{% url 'listofgyms:gym_list' %}" class="btn btn-outline-primary mt-2">
+                            <i class="fas fa-search me-1"></i>Find a Trainer
+                        </a>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<style>
+    .card {
+        border-radius: 12px;
+        overflow: hidden;
+        transition: transform 0.3s ease;
+    }
+
+    .card:hover {
+        transform: translateY(-5px);
+    }
+
+    .badge {
+        border-radius: 10px;
+        font-weight: 500;
+        padding: 0.5em 1em;
+    }
+
+    .table th {
+        font-weight: 600;
+        border-bottom: 1px solid #444;
+    }
+
+    .table-hover tbody tr:hover {
+        background-color: rgba(255, 255, 255, 0.05);
+    }
+
+    .rounded-circle {
+        transition: all 0.3s ease;
+    }
+
+    .btn {
+        border-radius: 8px;
+        transition: all 0.3s ease;
+    }
+
+    .btn:hover {
+        transform: scale(1.03);
+    }
+</style>
+{% endblock %}

@@ -1,0 +1,150 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1><i class="fas fa-shopping-cart me-3"></i>Shopping Cart</h1>
+        {% if cart_items %}
+        <span class="badge bg-primary rounded-pill p-2">
+            {{ total_items }} item{{ total_items|pluralize }}
+        </span>
+        {% endif %}
+    </div>
+
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                <i class="fas fa-{% if message.tags == 'success' %}check-circle{% else %}exclamation-triangle{% endif %} me-2"></i>
+                {{ message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        {% endfor %}
+    {% endif %}
+
+    {% if cart_items %}
+        <div class="table-responsive rounded-3 border border-secondary">
+            <table class="table table-dark table-hover align-middle mb-0">
+                <thead class="table-secondary">
+                    <tr>
+                        <th class="ps-4">Product</th>
+                        <th class="text-center">Quantity</th>
+                        <th class="text-center">Price</th>
+                        <th class="text-center">Total</th>
+                        <th class="text-center pe-4">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item in cart_items %}
+                        <tr>
+                            <td class="ps-4">
+                                <div class="d-flex align-items-center">
+                                    <div class="me-3">
+                                        {% if item.content_type.model == 'gym' %}
+                                            <i class="fas fa-dumbbell fa-2x text-primary"></i>
+                                        {% elif item.content_type.model == 'customuser' %}
+                                            <i class="fas fa-user-tie fa-2x text-info"></i>
+                                        {% elif item.content_type.model == 'shopproducts' %}
+                                        <i class="fas fa-tshirt fa-2x text-primary"></i>
+                                        {% endif %}
+                                    </div>
+                                    <div>
+                                        <div class="fw-bold">
+                                            {% if item.content_type.model == 'gym' %}
+                                                {{ item.product }}
+                                            {% elif item.content_type.model == 'customuser' %}
+                                                Trainer {{ item.product }}
+                                            {%elif item.content_type.model == 'shopproducts' %}
+                                                Product {{ item.product }}
+                                            {% endif %}
+                                        </div>
+                                        <div class="text-muted">
+                                            {% if item.content_type.model == 'gym' %}
+                                                Gym Membership
+                                            {% elif item.content_type.model == 'customuser' %}
+                                                Personal Training
+                                            {% elif item.content_type.model == 'shopproducts' %}
+                                            Products
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                </div>
+                            </td>
+                            <td class="text-center">
+                                <span class="badge bg-dark border border-secondary py-2 px-3">
+                                    {{ item.quantity }}
+                                    {% if item.content_type.model == 'gym' %}
+                                        month{{ item.quantity|pluralize }}
+                                    {% elif item.content_type.model == 'customuser' %}
+                                        session{{ item.quantity|pluralize }}
+                                    {% elif item.content_type.model == 'shopproducts' %}
+                                    quantity {{ item.quantity|pluralize }}
+                                    {% endif %}
+                                </span>
+                            </td>
+                            <td class="text-center">${{ item.price|floatformat:2 }}</td>
+                            <td class="text-center fw-bold">${{ item.get_total_price|floatformat:2 }}</td>
+                            <td class="text-center pe-4">
+                                <div class="d-flex justify-content-center">
+                                    <form method="post" action="{% url 'cart:cart_change' item.id %}" class="me-2">
+                                        {% csrf_token %}
+                                        <div class="input-group">
+                                            <select name="quantity" class="form-select form-select-sm bg-dark text-white border-secondary">
+                                                {% for i in "12345"|make_list %}
+                                                    <option value="{{ forloop.counter }}">+{{ forloop.counter }}</option>
+                                                {% endfor %}
+                                            </select>
+                                            <button type="submit" class="btn btn-sm btn-outline-primary">
+                                                <i class="fas fa-plus"></i>
+                                            </button>
+                                        </div>
+                                    </form>
+
+                                    <a href="{% url 'cart:cart_del' item.id %}"
+                                       class="btn btn-sm btn-outline-danger"
+                                       onclick="return confirm('Are you sure you want to remove this item?')">
+                                        <i class="fas fa-trash-alt"></i>
+                                    </a>
+                                </div>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <div class="card bg-dark border-secondary mt-4">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <h5 class="mb-0">Cart Total</h5>
+                    </div>
+                    <div class="d-flex align-items-center">
+                        <span class="fs-5 me-3">{{ total_items }} item{{ total_items|pluralize }}</span>
+                        <span class="fs-4 fw-bold text-primary">${{ total_price|floatformat:2 }}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="d-flex justify-content-between mt-4">
+            <a href="{% url 'listofgyms:gym_list' %}" class="btn btn-outline-light">
+                <i class="fas fa-arrow-left me-2"></i>Continue Shopping
+            </a>
+            <a href="{% url 'orders:order_create' %}" class="btn btn-success btn-lg px-4">
+                <i class="fas fa-credit-card me-2"></i>Checkout
+            </a>
+        </div>
+    {% else %}
+        <div class="text-center py-5">
+            <div class="mb-4">
+                <i class="fas fa-shopping-cart fa-4x text-muted"></i>
+            </div>
+            <h3 class="text-muted">Your cart is empty</h3>
+            <p class="text-muted mb-4">Add items to continue</p>
+            <a href="{% url 'listofgyms:gym_list' %}" class="btn btn-primary px-4">
+                <i class="fas fa-store me-2"></i>Start Shopping
+            </a>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}

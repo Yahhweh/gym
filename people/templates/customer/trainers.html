@@ -1,0 +1,199 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row">
+        <div class="col-lg-4 mb-4">
+            <div class="card border-0 shadow-lg">
+                <div class="card-header bg-dark text-white py-4">
+                    <div class="d-flex justify-content-center mb-3">
+                        {% if object.image %}
+                        <img src="{{ object.image.url }}" class="rounded-circle border border-3 border-primary"
+                             width="180" height="180" alt="{{ object.username }}">
+                        {% else %}
+                        <div class="bg-secondary rounded-circle d-flex align-items-center justify-content-center"
+                             style="width: 180px; height: 180px;">
+                            <i class="fas fa-user fa-3x text-light"></i>
+                        </div>
+                        {% endif %}
+                    </div>
+                    <h1 class="h3 text-center mb-0">{{ object.username }}</h1>
+                    <p class="text-center text-warning mb-0">Certified Fitness Trainer</p>
+                </div>
+
+                <div class="card-body bg-dark text-white">
+                    <p class="lead text-center fst-italic text-light">"Helping you reach your fitness goals one step at a time."</p>
+
+                    <div class="d-grid gap-2 mb-4">
+                        <div class="d-flex align-items-center">
+                            <i class="fas fa-award me-3 text-primary fa-lg"></i>
+                            <div>
+                                <div class="text-muted small">Specialization</div>
+                                <div class="fw-bold">{{ object.get_specialization_display }}</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="d-grid gap-2 mb-4">
+                        <div class="d-flex align-items-center">
+                            <i class="fas fa-calendar-alt me-3 text-primary fa-lg"></i>
+                            <div>
+                                <div class="text-muted small">Experience</div>
+                                <div class="fw-bold">{{ object.experience_years }} years</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="d-grid gap-2 mb-4">
+                        <div class="d-flex align-items-center">
+                            <i class="fas fa-dollar-sign me-3 text-primary fa-lg"></i>
+                            <div>
+                                <div class="text-muted small">Session Price</div>
+                                <div class="fw-bold">${{ object.price }}</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="d-grid gap-2">
+                        <div class="d-flex align-items-center">
+                            <i class="fas fa-clock me-3 text-primary fa-lg"></i>
+                            <div>
+                                <div class="text-muted small">Available from</div>
+                                <div class="fw-bold">{{ object.startTime }}</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-8">
+            {% if object.free %}
+            <div class="card border-0 shadow-lg mb-4">
+                <div class="card-header bg-dark text-white">
+                    <h3 class="h5 mb-0"><i class="fas fa-calendar-check me-2"></i>Book a Session</h3>
+                </div>
+                <div class="card-body bg-dark text-white">
+                    <form method="post" action="{% url 'cart:cart_add' id=object.id model_type='trainer' %}">
+                        {% csrf_token %}
+
+                        <div class="mb-4">
+                            <h4 class="mb-3"><i class="fas fa-clock me-2"></i>Availability Schedule</h4>
+                            <div class="table-responsive">
+                                <table class="table table-dark table-hover table-bordered">
+                                    <thead>
+                                        <tr class="bg-secondary">
+                                            <th>Day</th>
+                                            <th>Open</th>
+                                            <th>Close</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>Monday</td>
+                                            <td>08:00</td>
+                                            <td>17:00</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Tuesday</td>
+                                            <td>08:00</td>
+                                            <td>17:00</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Wednesday</td>
+                                            <td>08:00</td>
+                                            <td>17:00</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Thursday</td>
+                                            <td>08:00</td>
+                                            <td>17:00</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Friday</td>
+                                            <td>08:00</td>
+                                            <td>17:00</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Saturday</td>
+                                            <td>10:00</td>
+                                            <td>15:00</td>
+                                        </tr>
+                                        <tr class="bg-danger">
+                                            <td>Sunday</td>
+                                            <td colspan="2" class="text-center">Closed</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        <div class="d-grid">
+                            <button type="submit" class="btn btn-success btn-lg py-3">
+                                <i class="fas fa-calendar-plus me-2"></i>Book a Session
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            {% else %}
+            <div class="card border-0 shadow-lg">
+                <div class="card-body bg-dark text-white text-center py-5">
+                    <i class="fas fa-calendar-times fa-4x text-danger mb-4"></i>
+                    <h3 class="mb-3">Currently Unavailable</h3>
+                    <p class="lead">This trainer is fully booked at the moment.</p>
+                    <p>Please check back later or browse our other certified trainers.</p>
+                    <a href="#" class="btn btn-outline-light mt-3">
+                        <i class="fas fa-users me-2"></i>View Other Trainers
+                    </a>
+                </div>
+            </div>
+            {% endif %}
+
+            <div class="card border-0 shadow-lg mt-4">
+                <div class="card-header bg-dark text-white">
+                    <h3 class="h5 mb-0"><i class="fas fa-graduation-cap me-2"></i>Certifications & Qualifications</h3>
+                </div>
+                <div class="card-body bg-dark text-white">
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item bg-transparent text-white border-secondary">
+                            <i class="fas fa-certificate text-warning me-2"></i>
+                            Certified in {{ object.get_specialization_display }}
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .card {
+        border-radius: 15px;
+        overflow: hidden;
+        transition: transform 0.3s ease;
+    }
+
+    .card:hover {
+        transform: translateY(-5px);
+    }
+
+    .table th {
+        font-weight: 600;
+    }
+
+    .table-hover tbody tr:hover {
+        background-color: rgba(255, 255, 255, 0.1) !important;
+    }
+
+    .list-group-item {
+        padding: 1rem 1.25rem;
+    }
+
+    .btn-lg {
+        border-radius: 12px;
+        font-weight: 600;
+    }
+</style>
+{% endblock %}

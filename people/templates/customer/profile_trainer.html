@@ -1,0 +1,190 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+<div class="container py-4">
+    <div class="row">
+        <div class="col-lg-4 mb-4">
+            <div class="card bg-dark border-secondary shadow-lg">
+                <div class="card-header bg-secondary bg-opacity-25 py-3">
+                    <h2 class="h5 mb-0">User Profile</h2>
+                </div>
+
+                <div class="card-body text-center">
+                    {% if user.image %}
+                    <img src="{{ user.image.url }}" class="rounded-circle border border-3 border-primary mb-3"
+                         width="180" height="180" alt="{{ user.username }}">
+                    {% else %}
+                    <div class="bg-secondary rounded-circle d-flex align-items-center justify-content-center mx-auto mb-4"
+                         style="width: 180px; height: 180px;">
+                        <i class="fas fa-user fa-3x text-light"></i>
+                    </div>
+                    {% endif %}
+
+                    <h1 class="h4 mb-1">Hello, {{ user.first_name }} {{ user.last_name }}</h1>
+
+                    {% if user.is_trainer %}
+                    <span class="badge bg-warning text-dark py-2 px-3 mt-2">
+                        <i class="fas fa-certificate me-1"></i>Certified Trainer
+                    </span>
+                    {% endif %}
+
+                    <div class="mt-4">
+                        <div class="d-flex align-items-center mb-3">
+                            <div class="bg-primary p-2 rounded-circle me-3">
+                                <i class="fas fa-user fa-fw"></i>
+                            </div>
+                            <div class="text-start">
+                                <div class="text-muted small">Username</div>
+                                <div class="fw-bold">{{ user.username }}</div>
+                            </div>
+                        </div>
+
+                        <div class="d-flex align-items-center mb-3">
+                            <div class="bg-primary p-2 rounded-circle me-3">
+                                <i class="fas fa-envelope fa-fw"></i>
+                            </div>
+                            <div class="text-start">
+                                <div class="text-muted small">Email</div>
+                                <div class="fw-bold">{{ user.email }}</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-8">
+            <div class="card bg-dark border-secondary shadow-lg">
+                <div class="card-header bg-secondary bg-opacity-25 py-3">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <h2 class="h5 mb-0">Your Subscriptions</h2>
+                        <span class="badge bg-primary py-2 px-3">
+                            {{ subscriptions|length }} active
+                        </span>
+                    </div>
+                </div>
+
+                <div class="card-body">
+                    {% if subscriptions %}
+                    <div class="table-responsive">
+                        <table class="table table-dark table-hover align-middle">
+                            <thead>
+                                <tr>
+                                    <th>Gym</th>
+                                    <th>Subscription</th>
+                                    <th class="text-center">Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for subscription in subscriptions %}
+                                <tr>
+                                    <td>
+                                        <div class="d-flex align-items-center">
+                                            <div class="me-3">
+                                                <i class="fas fa-dumbbell fa-2x text-primary"></i>
+                                            </div>
+                                            <div>
+                                                <div class="fw-bold">
+                                                    <a href="{% url 'listofgyms:gym_detail' subscription.gym.id %}" class="text-decoration-none">
+                                                        {{ subscription.gym }}
+                                                    </a>
+                                                </div>
+                                                <div class="text-muted small">
+                                                    {{ subscription.gym.get_location_display }}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="text-muted small">Days remaining</div>
+                                        <div class="fw-bold">{{ subscription.days_left }} days</div>
+                                    </td>
+                                    <td class="text-center">
+                                        {% if subscription.days_left > 7 %}
+                                        <span class="badge bg-success py-2">Active</span>
+                                        {% elif subscription.days_left > 3 %}
+                                        <span class="badge bg-warning text-dark py-2">Expiring soon</span>
+                                        {% else %}
+                                        <span class="badge bg-danger py-2">About to expire</span>
+                                        {% endif %}
+                                    </td>
+                                        </div>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                    {% else %}
+                    <div class="text-center py-5">
+                        <div class="mb-4">
+                            <i class="fas fa-calendar-times fa-4x text-muted"></i>
+                        </div>
+                        <h3 class="text-muted">No Active Subscriptions</h3>
+                        <p class="text-muted">You don't have any active gym memberships at the moment.</p>
+                        <a href="{% url 'listofgyms:gym_list' %}" class="btn btn-primary mt-3">
+                            <i class="fas fa-dumbbell me-2"></i>Explore Gyms
+                        </a>
+                    </div>
+                    {% endif %}
+                </div>
+
+                {% if subscriptions %}
+                <div class="card-footer bg-transparent border-secondary">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div class="text-muted small">
+                            <i class="fas fa-info-circle me-1"></i>
+                            Your subscriptions will automatically expire when days remaining reach 0
+                        </div>
+                    </div>
+                </div>
+                {% endif %}
+        </div>
+    </div>
+</div>
+
+<style>
+    .card {
+        border-radius: 12px;
+        overflow: hidden;
+        transition: transform 0.3s ease;
+    }
+
+    .card:hover {
+        transform: translateY(-5px);
+    }
+
+    .rounded-circle {
+        transition: all 0.3s ease;
+    }
+
+    .rounded-circle:hover {
+        transform: rotate(10deg);
+    }
+
+    .table th {
+        font-weight: 600;
+        border-bottom: 1px solid #444;
+    }
+
+    .table-hover tbody tr:hover {
+        background-color: rgba(255, 255, 255, 0.05) !important;
+    }
+
+    .badge {
+        border-radius: 10px;
+        font-weight: 500;
+        padding: 0.5em 1em;
+    }
+
+    .btn {
+        border-radius: 8px;
+        transition: all 0.3s ease;
+    }
+
+    .btn:hover {
+        transform: scale(1.03);
+    }
+</style>
+{% endblock %}
